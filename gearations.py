@@ -1,11 +1,12 @@
 import cadquery as cq
 import math
 
-toTip = 3.6
 tipDia = 2.6
+toTip = 3.6 - 1.3
 baseWidth = 3
 gapWidth = 3.16
 gapHeight = 1.6
+gearThickness = 3.2 # 5.2
 
 bw2 = baseWidth / 2
 tr2 = tipDia/2
@@ -85,13 +86,29 @@ def gear(numTeeth):
     fpT = 0 + toothTheta/2
     fpR = gearRad
     
-    gear = cq.Workplane("XZ")
+    gear = cq.Workplane("XY")
     gear = gear.moveTo(math.cos(fpT) * fpR, math.sin(fpT) * fpR)
     for i in range(numTeeth):
         t = (math.pi * 2) / numTeeth
         gear = simpleTooth(gear, t * (i+1), gearRad, toothTheta, taperTheta)
     gear = gear.close()
-    gear = gear.extrude(5.2)
+    
+    
+    
+    gear = gear.extrude(gearThickness)
+    
+    
+    
     return gear
 
-show_object(gear(20))
+g = gear(20)
+show_object(g)
+
+
+# cq.exporters.export(g, "gear_20.stl")
+# cq.exporters.export(gear(10), "gear_10.stl")
+# cq.exporters.export(gear(32), "gear_32.stl")
+
+
+
+
